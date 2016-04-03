@@ -10,8 +10,16 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    func getImages() -> [UIImage] {
+        return [UIImage(named: "baldhill")!, UIImage(named: "cathedral")!, UIImage(named: "lake")!]
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let gameModel = GameModel(numberOfTiles: 8, images: getImages())
+        print(gameModel)
         // Do any additional setup after loading the view, typically from a nib.
     }
 
