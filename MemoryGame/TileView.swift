@@ -18,20 +18,31 @@ class TileView: UIView {
     
     var image: UIImage!
     
-    var defaultImage: UIImage? = UIImage(named: "question")
-    
     var tileIndex: Int = -1
+    
+    var delegate: TileViewDelegate?
+    
+    var tileIsHidden: Bool = false
     
     func revealImage() {
         imageView.image = image
+        
     }
     
     func coverImage() {
-        imageView.image = defaultImage
+        imageView.image = UIImage(named: "question")
+
     }
     
     func hide() {
         imageView.image = nil
+        tileIsHidden = true
+        // Remove gestured Recogniser
+        
+    }
+    
+    func didTap() {
+        delegate?.didSelectTile(self)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -51,8 +62,10 @@ class TileView: UIView {
         // Add Constraints
         self.addConstraints([topConstraint, bottomConstraint, leftConstraint, rightConstraint])
         
-        imageView.image = defaultImage
-        
+        let touch = UITapGestureRecognizer(target:self, action:"didTap")
+        self.addGestureRecognizer(touch)
+
+
     }
     
 }

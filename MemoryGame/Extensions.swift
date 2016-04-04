@@ -19,6 +19,12 @@ extension CollectionType {
     }
 }
 
+func dispatchAfter(delay: Float, block: dispatch_block_t) {
+    let delayTime = Double(delay) * Double(NSEC_PER_SEC)
+    let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delayTime))
+    dispatch_after(time, dispatch_get_main_queue(), block)
+}
+
 extension MutableCollectionType where Index == Int {
     /// Shuffle the elements of `self` in-place.
     mutating func shuffleInPlace() {

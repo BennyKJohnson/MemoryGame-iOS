@@ -25,7 +25,11 @@ class GameModel {
     
     var numberOfMatchedTiles: Int = 0
     
-    var score: Int = 0
+    var score: Int = 0 {
+        didSet {
+            delegate?.scoreDidUpdate(self, newScore: score)
+        }
+    }
     
     var delegate: GameModelDelegate? = nil
     
@@ -45,6 +49,7 @@ class GameModel {
         isSecondTurn = false
         numberOfMatchedTiles = 0
         score = 0
+        tiles = []
         
         // Populate Tiles
         var imageCounter = 0
@@ -70,6 +75,31 @@ class GameModel {
         // 1 Move
         secondLastTileTappedIndex = lastTileTappedIndex
         lastTileTappedIndex = tileIndex
+        if let secondLastTileTappedIndex = secondLastTileTappedIndex, lastTileTappedIndex = lastTileTappedIndex {
+            let firstTile = tiles[secondLastTileTappedIndex]
+            let secondTile = tiles[lastTileTappedIndex]
+            
+            if firstTile.imageIdentifier == secondTile.imageIdentifier {
+                // Matched
+                self.delegate?.didMatchTile(self, tileIndex: lastTileTappedIndex, previousTileIndex: secondLastTileTappedIndex)
+                score += 200
+                numberOfMatchedTiles += 2
+                
+                if(numberOfMatchedTiles == tiles.count) {
+                    delegate?.gameDidComplete(self)
+                }
+                
+            } else {
+                // Mismatched
+                delegate?.didFailToMatchTile(self, tileIndex: lastTileTappedIndex, previousTileIndex: secondLastTileTappedIndex)
+                score -= 100
+            }
+            
+            // Reset tapped Index
+            self.lastTileTappedIndex = nil
+            self.secondLastTileTappedIndex = nil
+        }
+        
         
     }
     
