@@ -28,12 +28,9 @@ class ViewController: UIViewController, TileViewDelegate {
         
         gameModel = GameModel(numberOfTiles: numberOfTiles, images: getImages())
         gameModel.delegate = self
-        print(gameModel)
         
         setupTiles()
       
-        
-        // Do any additional setup after loading the view, typically from a nib.
     }
     
     func setupTiles() {
